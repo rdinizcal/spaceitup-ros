@@ -13,7 +13,12 @@ If you are here to run Curiosity rather than installing it skip the first sectio
 Build and run the dockers:
 
 ```
-./../moveit2/build.sh
+cd docker/moveit2
+./build.sh
+```
+
+```
+cd docker/space_robots
 ./build.sh
 ./run.sh
 ```

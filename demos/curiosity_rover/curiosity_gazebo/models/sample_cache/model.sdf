@@ -1,0 +1,47 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="sample_cache">
+    <static>false</static>    
+    <link name="body">
+      <pose>0 0 0.05 0 0 0</pose>
+      <collision name="collision">
+      <inertial>
+        <mass>1.0</mass>
+        <inertia>
+          <ixx>0.01</ixx>
+          <iyy>0.01</iyy>
+          <izz>0.01</izz>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyz>0.0</iyz>
+        </inertia>
+      </inertial>
+        <geometry>
+          <cylinder>
+            <radius>0.1</radius>
+            <length>0.1</length>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <cylinder>
+            <radius>0.1</radius>
+            <length>0.1</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.7 0.7 0.7 1</ambient>
+          <diffuse>0.9 0.9 0.9 1</diffuse>
+          <specular>0.3 0.3 0.3 1</specular>
+        </material>
+        <surface>
+          <bounce>
+            <restitution_coefficient>0.7</restitution_coefficient> 
+            <threshold>1.0</threshold>
+          </bounce>
+        </surface>
+      </visual>
+    </link>
+  </model>
+</sdf>

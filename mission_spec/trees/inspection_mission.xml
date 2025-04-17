@@ -1,0 +1,28 @@
+<root main_tree_to_execute="MainTree">
+    <BehaviorTree ID="MainTree">
+        <Sequence name="root_sequence">
+            <Fallback name="First Photo">
+                <IsPictureTaken picture_id="1" />
+                <Sequence>
+                    <Fallback>
+                        <IsRobotClose x="4" y="5" range="0.01" />
+                        <!-- <LocationReached x="4" y="5" /> -->
+                        <NavigateToGoal x="4" y="5" />
+                    </Fallback>
+                    <TakePicture picture_id="1" />
+                </Sequence>
+            </Fallback>
+            <Fallback name="Second Photo">
+                <IsPictureTaken picture_id="2" />
+                <Sequence>
+                    <Fallback>
+                        <IsRobotClose x="3" y="2" range="0.01"/>
+                        <!-- <LocationReached x="3" y="2" /> -->
+                        <NavigateToGoal x="3" y="2" />
+                    </Fallback>
+                    <TakePicture picture_id="2" />
+                </Sequence>
+            </Fallback>
+        </Sequence>
+    </BehaviorTree>
+</root>

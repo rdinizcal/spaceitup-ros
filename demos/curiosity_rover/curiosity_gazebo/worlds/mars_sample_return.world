@@ -1,0 +1,118 @@
+<?xml version="1.0" ?>
+<sdf version="1.9">
+  <world name="mars_sample_return">    <!-- Gravity on Mars -->
+    <gui fullscreen="0">
+
+    <plugin filename="GzScene3D" name="3D View">
+        <ignition-gui>
+          <title>3D View</title>
+          <property type="bool" key="showTitleBar">false</property>
+          <property type="string" key="state">docked</property>
+        </ignition-gui>
+        <engine>ogre2</engine>
+        <scene>scene</scene>
+        <background_color>0.9 0.753 0.66</background_color>
+        <camera_pose>-5.0 0.0 -6.0 0.0 0.0 0.0</camera_pose>
+      </plugin>
+
+    <plugin filename="ImageDisplay" name="Image Display">
+        <ignition-gui>
+          <property key="state" type="string">floating</property>
+        </ignition-gui>
+      </plugin>
+    </gui>
+
+    <!-- Physics settings -->
+    <physics type="ode">
+        <max_step_size>0.01</max_step_size>        <!-- 4 ms -->
+        <real_time_update_rate>500</real_time_update_rate>  <!-- 250 Hz -->
+    </physics>
+
+
+    <server_config>
+    <plugins>
+        <plugin entity_name="*"
+                entity_type="world"
+                filename="ignition-gazebo-scene-broadcaster-system"
+                name="ignition::gazebo::systems::SceneBroadcaster">
+        </plugin>
+        <plugin entity_name="*"
+                entity_type="world"
+                filename="ignition-gazebo-sensors-system"
+                name="ignition::gazebo::systems::Sensors">
+        <render_engine>ogre2</render_engine>
+        </plugin>
+    </plugins>
+    </server_config>
+
+    <!-- Atmosphere -->
+    <gravity>0 0 -3.72</gravity>    
+    <atmosphere type="adiabatic"/>    
+    
+    <!-- Lighting -->
+
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>  
+    
+    <!-- Sample Cache Instances -->
+    <!-- You can adjust poses later for more realism -->
+    <include>
+      <uri>model://sample_cache</uri>
+      <name>sample_cache-1</name>
+      <pose>20 0 5 0 0 9.78</pose>
+    </include>
+    <include>
+      <uri>model://sample_cache</uri>
+      <name>sample_cache-2</name>
+      <pose>78 15 5 0 0 3.2</pose>
+    </include>
+    <include>
+      <uri>model://sample_cache</uri>
+      <name>sample_cache-3</name>
+      <pose>-67 -32 5 0 0 4.82</pose>
+    </include>
+    <include>
+      <uri>model://sample_cache</uri>
+      <name>sample_cache-4</name>
+      <pose>-14 14 5 0 0 3.42</pose>
+    </include>
+    <include>
+      <uri>model://sample_cache</uri>
+      <name>sample_cache-5</name>
+      <pose>21 -53 5 0 0 0.15</pose>
+    </include>
+    <include>
+      <uri>model://sample_cache</uri>
+      <name>sample_cache-6</name>
+      <pose>32 -44 5 0 0 4.67</pose>
+    </include>
+    <include>
+      <uri>model://sample_cache</uri>
+      <name>sample_cache-7</name>
+      <pose>1 84 5 0 0 5.68</pose>
+    </include>
+    <include>
+      <uri>model://sample_cache</uri>
+      <name>sample_cache-8</name>
+      <pose>20 23 5 0 0 6.10</pose>
+    </include>    
+    
+    <include>
+      <uri>model://curiosity_path</uri>
+      <name>curiosity_path</name>
+      <pose>0 0 0 0 0 0</pose>
+    </include>
+
+</world>
+</sdf>

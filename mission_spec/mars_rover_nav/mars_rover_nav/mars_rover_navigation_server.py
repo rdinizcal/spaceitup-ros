@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import rclpy
 from rclpy.node import Node
+from rclpy.executors import MultiThreadedExecutor
+from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.action import ActionServer, GoalResponse, CancelResponse
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
@@ -12,13 +14,16 @@ class MarsRoverNavServer(Node):
     def __init__(self):
         super().__init__('mars_rover_nav_server')
 
+        self.callback_group = ReentrantCallbackGroup()
+
         self.action_server = ActionServer(
             self,
             NavigateToPose,
             'NavigateToGoal',
             self.execute_callback,
             goal_callback=self.goal_callback,
-            cancel_callback=self.cancel_callback
+            cancel_callback=self.cancel_callback,
+            callback_group=self.callback_group
         )
 
         self.cmd_pub = self.create_publisher(Twist, '/cmd_vel', 10)
@@ -26,14 +31,15 @@ class MarsRoverNavServer(Node):
             Odometry,
             '/model/curiosity_mars_rover/odometry',
             self.odom_callback,
-            10
+            10,
+            callback_group=self.callback_group
         )
 
         self.current_pose = None
         self.goal_pose = None
         self.active_goal_handle = None
 
-        self.timer = self.create_timer(0.1, self.control_loop)
+        self.timer = self.create_timer(0.1, self.control_loop, callback_group=self.callback_group)
         self.get_logger().info("NavigateToGoal action server ready.")
 
     def goal_callback(self, goal_request):
@@ -45,8 +51,9 @@ class MarsRoverNavServer(Node):
         return CancelResponse.ACCEPT
 
     def execute_callback(self, goal_handle):
-        self.get_logger().info("Executing goal...")
+        self.get_logger().info("Executing goal")
         self.goal_pose = goal_handle.request.pose.pose
+        self.get_logger().info(f"Goal pose: {self.goal_pose}")
         self.active_goal_handle = goal_handle
 
         while not goal_handle.is_cancel_requested and rclpy.ok():
@@ -90,14 +97,18 @@ class MarsRoverNavServer(Node):
 
         yaw = self.get_yaw_from_quaternion(self.current_pose.orientation)
         target_angle = math.atan2(dy, dx)
+
         angle_diff = self.normalize_angle(target_angle - yaw)
 
         cmd = Twist()
         if distance > 0.2:
             if abs(angle_diff) > 0.1:
                 cmd.angular.z = 0.5 * angle_diff
+                # cmd.linear.x = max(0.5 * distance, 1.0)
+                cmd.linear.x = 1.0 if 0.5 * distance > 1.0 else 0.5 * distance
             else:
-                cmd.linear.x = 0.5 * distance
+                cmd.angular.z = 0.0
+                cmd.linear.x = 3.0 if 0.5 * distance > 3.0 else 0.5 * distance
         else:
             cmd.linear.x = 0.0
             cmd.angular.z = 0.0
@@ -124,11 +135,15 @@ class MarsRoverNavServer(Node):
 def main(args=None):
     rclpy.init(args=args)
     node = MarsRoverNavServer()
+    executor = MultiThreadedExecutor()
+    executor.add_node(node)
     try:
-        rclpy.spin(node)
+        executor.spin()
+        # rclpy.spin(node)
     except KeyboardInterrupt:
         pass
     finally:
+        node.stop_robot()
         node.destroy_node()
         rclpy.shutdown()
 

@@ -3,10 +3,15 @@ import py_trees.behaviour
 from py_trees_ros.subscribers import ToBlackboard
 from py_trees_ros.action_clients import FromConstant
 
+from cv_bridge import CvBridge
+import cv2
+
 from  nav2_msgs.action import NavigateToPose
 from  nav_msgs.msg import Odometry
 from geometry_msgs.msg import PoseStamped
+from sensor_msgs.msg import Image
 
+import os
 import math
 
 ## Actions ##
@@ -37,24 +42,64 @@ class NavigateToGoal(FromConstant):
 
         return status
 
-class TakePicture(py_trees.behaviour.Behaviour):
-    def __init__(self, name="TakePicture", picture_id="0"):
-        super().__init__(name)
+# class TakePicture(py_trees.behaviour.Behaviour):
+#     def __init__(self, name="TakePicture", picture_id="0"):
+#         super().__init__(name)
+#         self.picture_id = int(picture_id)
+#         self.blackboard = py_trees.blackboard.Client(name="TakePictureClient")
+#         self.blackboard_key = f"picture_{self.picture_id}"
+#         self.blackboard.register_key(self.blackboard_key, py_trees.common.Access.WRITE)
+
+#     def update(self):
+#         self.logger.info(f"Taking picture with ID {self.picture_id}")
+
+#         if not self.blackboard.exists(self.blackboard_key):
+#             self.blackboard.set(self.blackboard_key, True)
+#         else:
+#             self.logger.info(f"Picture with ID {self.picture_id} already taken. Taking another picture.")
+#             self.blackboard.set(self.blackboard_key, True)
+
+#         return py_trees.common.Status.SUCCESS
+
+class TakePicture(ToBlackboard):
+    def __init__(self, name="TakePicture", picture_id="0", save_path="/"):
+        super().__init__(topic_name="/image_raw", topic_type=Image, qos_profile=10, blackboard_variables={"last_camera_frame": None}, name=name, clearing_policy=py_trees.common.ClearingPolicy.ON_SUCCESS)
         self.picture_id = int(picture_id)
-        self.blackboard = py_trees.blackboard.Client(name="TakePictureClient")
+        self.filename = os.path.join(save_path, f"picture_{picture_id}.jpeg")
+        self.bridge = CvBridge()
         self.blackboard_key = f"picture_{self.picture_id}"
-        self.blackboard.register_key(self.blackboard_key, py_trees.common.Access.WRITE)
+        self.blackboard_client = self.attach_blackboard_client(name="TakePictureClient")
+        self.blackboard_client.register_key("last_camera_frame", py_trees.common.Access.WRITE)
+        self.blackboard_client.register_key(self.blackboard_key, py_trees.common.Access.WRITE)
 
     def update(self):
         self.logger.info(f"Taking picture with ID {self.picture_id}")
 
-        if not self.blackboard.exists(self.blackboard_key):
-            self.blackboard.set(self.blackboard_key, True)
-        else:
+        if self.blackboard_client.exists(self.blackboard_key):
             self.logger.info(f"Picture with ID {self.picture_id} already taken. Taking another picture.")
-            self.blackboard.set(self.blackboard_key, True)
+            self.blackboard_client.unset(self.blackboard_key)
 
-        return py_trees.common.Status.SUCCESS
+        to_blackboard_result = super().update()
+
+        if to_blackboard_result == py_trees.common.Status.SUCCESS:
+            # print(self.blackboard_client)
+            if not self.blackboard_client.exists("last_camera_frame"):
+                self.logger.warn("No frame available on blackboard")
+                return py_trees.common.Status.RUNNING
+
+            image_msg = self.blackboard_client.get("last_camera_frame")
+            try:
+                cv_image = self.bridge.imgmsg_to_cv2(image_msg, desired_encoding="bgr8")
+                cv2.imwrite(self.filename, cv_image)
+                self.logger.info(f"Image saved to {self.filename}")
+                self.blackboard_client.set(self.blackboard_key, True)
+                return py_trees.common.Status.SUCCESS
+            except Exception as e:
+                self.logger.error(f"Failed to convert/save image: {e}")
+                return py_trees.common.Status.FAILURE
+
+        else:
+            return to_blackboard_result
 
 ## Conditions ##
 class IsRobotClose(ToBlackboard):

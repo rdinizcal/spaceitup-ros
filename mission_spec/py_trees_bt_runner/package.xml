@@ -7,10 +7,12 @@
   <maintainer email="gianluca.filippone@gssi.it">Gianluca Filippone</maintainer>
   <license>TODO: License declaration</license>
 
+  <depend>cv_bridge</depend>
   <depend>rclpy</depend>
   <depend>py_trees</depend>
   <depend>py_trees_ros</depend>
   <depend>nav2_msgs</depend>
+  <depend>sensor_msgs</depend>
   <depend>geometry_msgs</depend>
 
   <export>

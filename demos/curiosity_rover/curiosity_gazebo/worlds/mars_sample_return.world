@@ -75,12 +75,12 @@
     <include>
       <uri>model://sample_cache</uri>
       <name>sample_cache-2</name>
-      <pose>78 15 5 0 0 3.2</pose>
+      <pose>36 15 5 0 0 3.2</pose>
     </include>
     <include>
       <uri>model://sample_cache</uri>
       <name>sample_cache-3</name>
-      <pose>-67 -32 5 0 0 4.82</pose>
+      <pose>-47 -32 5 0 0 4.82</pose>
     </include>
     <include>
       <uri>model://sample_cache</uri>
@@ -100,7 +100,7 @@
     <include>
       <uri>model://sample_cache</uri>
       <name>sample_cache-7</name>
-      <pose>1 84 5 0 0 5.68</pose>
+      <pose>1 24 5 0 0 5.68</pose>
     </include>
     <include>
       <uri>model://sample_cache</uri>

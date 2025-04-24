@@ -5,22 +5,22 @@
                 <IsPictureTaken picture_id="1" />
                 <Sequence>
                     <Fallback>
-                        <IsRobotClose x="4" y="5" range="0.01" />
+                        <IsRobotClose x="20" y="5" range="0.2" />
                         <!-- <LocationReached x="4" y="5" /> -->
-                        <NavigateToGoal x="4" y="5" />
+                        <NavigateToGoal x="20" y="5" />
                     </Fallback>
-                    <TakePicture picture_id="1" />
+                    <TakePicture picture_id="1" save_path="/home/spaceros-user/demos_ws"/>
                 </Sequence>
             </Fallback>
             <Fallback name="Second Photo">
                 <IsPictureTaken picture_id="2" />
                 <Sequence>
                     <Fallback>
-                        <IsRobotClose x="3" y="2" range="0.01"/>
+                        <IsRobotClose x="36" y="15" range="0.2"/>
                         <!-- <LocationReached x="3" y="2" /> -->
-                        <NavigateToGoal x="3" y="2" />
+                        <NavigateToGoal x="36" y="15" />
                     </Fallback>
-                    <TakePicture picture_id="2" />
+                    <TakePicture picture_id="2" save_path="/home/spaceros-user/demos_ws"/>
                 </Sequence>
             </Fallback>
         </Sequence>

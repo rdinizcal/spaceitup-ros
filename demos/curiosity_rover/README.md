@@ -2,35 +2,6 @@
 
 This is a simple demo of controlling the curiosity rover using spaceROS.
 
-### Installation
-
-To start the demo, there are few dependencies that need to be installed. The following steps will guide you through the installation process.
-
-1. You will need docker installed on your system. If not, you can follow the instructions [here](https://docs.docker.com/get-docker/).
-
-### How to run the demo
-
-1. Clone the demo repository
-    ```bash
-    git clone https://github.com/space-ros/demos.git
-    ```
-2. cd into the `curiosity_rover` directory
-    ```bash
-    cd curiosity_rover
-    ```
-3. To build the demo, you can use the following command.
-    ```bash
-    # To build all the demos for the canadarm2
-    ./build.sh
-    ```
-4. To run the demo, you can use the following command.
-    ```bash
-    # To run the demo
-    ./run.sh
-    ```
-
-This will start the demo in one terminal and gazebo in another terminal. To control the rover, we provide ros2 services for the demo. You can control the rover using the following services.
-
 1. To move around, you can use the `move` service. The service takes two arguments, `linear` and `angular` velocities. You can call the service using the following command.
     ```bash
     # Move forward

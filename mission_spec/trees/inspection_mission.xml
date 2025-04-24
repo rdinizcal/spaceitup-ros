@@ -5,9 +5,9 @@
                 <IsPictureTaken picture_id="1" />
                 <Sequence>
                     <Fallback>
-                        <IsRobotClose x="20" y="5" range="0.2" />
+                        <IsRobotClose x="12.2" y="-1" range="0.5" />
                         <!-- <LocationReached x="4" y="5" /> -->
-                        <NavigateToGoal x="20" y="5" />
+                        <NavigateToGoal x="12.2" y="-1" />
                     </Fallback>
                     <TakePicture picture_id="1" save_path="/home/spaceros-user/demos_ws"/>
                 </Sequence>
@@ -16,9 +16,9 @@
                 <IsPictureTaken picture_id="2" />
                 <Sequence>
                     <Fallback>
-                        <IsRobotClose x="36" y="15" range="0.2"/>
+                        <IsRobotClose x="33" y="10" range="0.5"/>
                         <!-- <LocationReached x="3" y="2" /> -->
-                        <NavigateToGoal x="36" y="15" />
+                        <NavigateToGoal x="33" y="10" />
                     </Fallback>
                     <TakePicture picture_id="2" save_path="/home/spaceros-user/demos_ws"/>
                 </Sequence>

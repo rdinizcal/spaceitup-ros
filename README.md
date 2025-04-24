@@ -1,10 +1,4 @@
-# Space ROS @ Workstation-2
-
-Created on: April 4th 2025, 16:26
-
-Last Updated on: April 17th 2025, 17:24 (Ricardo D. Caldas)
-
-This canvas intends to document and explain how did I run the newest version of ROS Space in the Workstation-2 with the GPU (NVIDIA RTX 4500)
+# Mars Sample Return Mission -- Space ROS with Curiosity
 
 If you are here to run Curiosity rather than installing it skip the first section and go directly to Running Curiosity in Mars
 

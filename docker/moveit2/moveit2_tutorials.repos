@@ -2,16 +2,16 @@ repositories:
   moveit_task_constructor:
     type: git
     url: https://github.com/moveit/moveit_task_constructor.git
-    version: humble
+    version: e704159
   moveit_visual_tools:
     type: git
     url: https://github.com/moveit/moveit_visual_tools
-    version: ros2
+    version: 89aa0b6
   rosparam_shortcuts:
     type: git
     url: https://github.com/PickNikRobotics/rosparam_shortcuts
-    version: ros2
+    version: fcb53f8
   rviz_visual_tools:
     type: git
     url: https://github.com/PickNikRobotics/rviz_visual_tools.git
-    version: ros2
+    version: b49117c
